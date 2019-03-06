@@ -1,7 +1,7 @@
 import React from 'react';
 import './css/App.css';
 import { connect } from "react-redux";
-import { contactsFetched } from "./actions";
+import { contactsFetched, contactsFetching } from "./actions";
 
 //const EventEmitter = require('events');
 
@@ -49,11 +49,14 @@ class ContactsList extends React.Component {
     };
 
     render(){
-        return (
-            <ul className="ui relaxed divided list selection">
-                {this.props.contacts.contacts.map(this.contactToContactItem)}
-            </ul>
-        );
+        if (this.props.fetching === true)
+            return (<h2>"Ładowanie..."</h2>);
+        else
+            return (
+                <ul className="ui relaxed divided list selection">
+                    {this.props.contacts.map(this.contactToContactItem)}
+                </ul>
+            );
     }
 }
 
@@ -78,6 +81,7 @@ export class App extends React.Component {
     }
 
     componentDidMount() {
+        this.props.contactsFetching();
         fetch("https://randomuser.me/api/?format=json&results=10")
             .then(res => res.json())
             .then(json => this.props.contactsFetched(json.results));
@@ -90,7 +94,7 @@ export class App extends React.Component {
                 <main className="ui main text container">
                     <br/>
                     <br/>
-                    <ContactsList contacts={this.props.contacts} />
+                    <ContactsList contacts={this.props.contacts} fetching={this.props.fetching}/>
                 </main>
             </div>
         );
@@ -103,7 +107,7 @@ const mapStateToProps = (state) => {
         contacts: state.contacts
     }
 };
-const mapDispatchToProps = { contactsFetched };
+const mapDispatchToProps = { contactsFetched, contactsFetching };
 
 const AppContainer = connect(mapStateToProps, mapDispatchToProps)(App);
 
