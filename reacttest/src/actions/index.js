@@ -6,3 +6,8 @@ export const contactsFetched = (contacts) => ({
 export const contactsFetching = () => ({
     type: 'FETCH_IN_PROGRESS'
 });
+
+export const searchContacts = (text) => ({
+    type: 'SEARCH_CONTACTS',
+    text
+});

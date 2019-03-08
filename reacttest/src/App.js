@@ -2,12 +2,8 @@ import React from 'react';
 import './css/App.css';
 import { connect } from "react-redux";
 import { contactsFetched, contactsFetching } from "./actions";
-
-//const EventEmitter = require('events');
-
-//class MyEmitter extends EventEmitter {}
-
-//var EE = new MyEmitter();
+import { ContactsFilterContainer } from "./ContactsFilter";
+import { getFilteredContacts } from "./selectors/getFilteredContacts";
 
 class AppHeader extends React.Component{
     constructor(props) {
@@ -76,6 +72,10 @@ class ContactItem extends React.Component{
 }
 
 export class App extends React.Component {
+    state = {
+        search: ""
+    };
+
     constructor(){
         super();
     }
@@ -94,6 +94,8 @@ export class App extends React.Component {
                 <main className="ui main text container">
                     <br/>
                     <br/>
+                    <br/>
+                    <ContactsFilterContainer />
                     <ContactsList contacts={this.props.contacts} fetching={this.props.fetching}/>
                 </main>
             </div>
@@ -104,7 +106,8 @@ export class App extends React.Component {
 const mapStateToProps = (state) => {
     return {
         fetching: state.fetching,
-        contacts: state.contacts
+        contacts: getFilteredContacts(state.contacts, state.contactsSearch)
+        // contacts: state.contacts
     }
 };
 const mapDispatchToProps = { contactsFetched, contactsFetching };
