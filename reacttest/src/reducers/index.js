@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
-import { contacts, fetching, contactsSearch } from "./contacts";
+import { contacts, fetching, contactsSearch, seed } from "./contacts";
 
 export default combineReducers({
-    contacts, fetching, contactsSearch
+    contacts, fetching, contactsSearch, seed
 });

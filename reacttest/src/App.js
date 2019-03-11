@@ -1,11 +1,12 @@
 import React from 'react';
 import './css/App.css';
 import {connect} from "react-redux";
-import {contactsFetched, contactsFetching} from "./actions";
+import {contactsFetched, contactsFetching, fetchContacts} from "./actions";
 import {ContactsFilterContainer} from "./ContactsFilter";
 import {getFilteredContacts} from "./selectors/getFilteredContacts";
 import {AppHeader} from "./AppHeader";
 import {ContactsList} from "./ContactList";
+import {SeedPickerContainer} from "./SeedPicker";
 
 export class App extends React.Component {
 
@@ -14,10 +15,7 @@ export class App extends React.Component {
     }
 
     componentDidMount() {
-        this.props.contactsFetching();
-        fetch("https://randomuser.me/api/?format=json&results=10")
-            .then(res => res.json())
-            .then(json => this.props.contactsFetched(json.results));
+        this.props.fetchContacts()
     }
 
     render(){
@@ -25,11 +23,16 @@ export class App extends React.Component {
             <div>
                 <AppHeader/>
                 <main className="ui main text container">
-                    <br/>
-                    <br/>
-                    <br/>
-                    <ContactsFilterContainer />
-                    <ContactsList contacts={this.props.contacts} fetching={this.props.fetching}/>
+                    <form className="ui large form">
+                        <div className="ui segment">
+                            <br/>
+                            <br/>
+                            <br/>
+                            <SeedPickerContainer />
+                            <ContactsFilterContainer />
+                        </div>
+                    </form>
+                    <ContactsList contacts={this.props.contacts} fetching={this.props.fetching} />
                 </main>
             </div>
         );
@@ -42,7 +45,7 @@ const mapStateToProps = (state) => {
         contacts: getFilteredContacts(state)
     }
 };
-const mapDispatchToProps = { contactsFetched, contactsFetching };
+const mapDispatchToProps = { fetchContacts  };
 
 const AppContainer = connect(mapStateToProps, mapDispatchToProps)(App);
 
