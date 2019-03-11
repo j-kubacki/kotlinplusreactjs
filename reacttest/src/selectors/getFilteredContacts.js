@@ -1,12 +1,19 @@
-export const getFilteredContacts = (contacts, text) => {
-    const contactsSearch = text.toLowerCase();
+import { createSelector } from 'reselect'
 
-    return contacts.filter(contact => {
-        const { first, last } = contact.name;
+const getContacts = (state) => state.contacts
+const getSearchText = (state) => state.contactsSearch
 
-        return (
-            first.toLowerCase().includes(contactsSearch) ||
-            last.toLowerCase().includes(contactsSearch)
-        );
-    });
-};
+export const getFilteredContacts = createSelector(
+    [ getContacts, getSearchText ],
+    (contacts, text) => {
+        const contactsSearch = text.toLowerCase();
+        return contacts.filter(contact => {
+            const { first, last } = contact.name;
+
+            return (
+                first.toLowerCase().includes(contactsSearch) ||
+                last.toLowerCase().includes(contactsSearch)
+            );
+        });
+    }
+)

@@ -3,7 +3,7 @@ import './css/App.css';
 import { connect } from "react-redux";
 import { contactsFetched, contactsFetching } from "./actions";
 import { ContactsFilterContainer } from "./ContactsFilter";
-import { getFilteredContacts } from "./selectors/getFilteredContacts";
+import { getFilteredContacts} from "./selectors/getFilteredContacts";
 
 class AppHeader extends React.Component{
     constructor(props) {
@@ -72,9 +72,6 @@ class ContactItem extends React.Component{
 }
 
 export class App extends React.Component {
-    state = {
-        search: ""
-    };
 
     constructor(){
         super();
@@ -106,8 +103,7 @@ export class App extends React.Component {
 const mapStateToProps = (state) => {
     return {
         fetching: state.fetching,
-        contacts: getFilteredContacts(state.contacts, state.contactsSearch)
-        // contacts: state.contacts
+        contacts: getFilteredContacts(state)
     }
 };
 const mapDispatchToProps = { contactsFetched, contactsFetching };
