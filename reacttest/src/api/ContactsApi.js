@@ -1,4 +1,4 @@
-export function getAll(url, seed) {
+export const getAll = (url, seed) => {
     return fetch(
         url +
         encodeURIComponent(seed)
