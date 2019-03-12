@@ -1,12 +1,12 @@
 import React from 'react';
 import './css/App.css';
 import {connect} from "react-redux";
-import {contactsFetched, contactsFetching, fetchContacts} from "./actions";
+import {fetchContacts} from "./actions";
 import {ContactsFilterContainer} from "./ContactsFilter";
 import {getFilteredContacts} from "./selectors/getFilteredContacts";
 import {AppHeader} from "./AppHeader";
-import {ContactsList} from "./ContactList";
 import {SeedPickerContainer} from "./SeedPicker";
+import {AsyncComponent} from "./AsyncComponent";
 
 export class App extends React.Component {
 
@@ -32,10 +32,25 @@ export class App extends React.Component {
                             <ContactsFilterContainer />
                         </div>
                     </form>
-                    <ContactsList contacts={this.props.contacts} fetching={this.props.fetching} />
+                    {this.renderContactsList()}
                 </main>
             </div>
         );
+    }
+
+    renderContactsList = () =>{
+        if (this.props.fetching){
+            return <p>Ładowanie</p>
+        }
+        if (this.props.contacts.length < 1){
+            return <p>Brak kontaktów</p>
+        }
+        return (<AsyncComponent
+            componentProps={{ contacts: this.props.contacts}}
+            componentProvider={() =>
+                import("./ContactsList").then(module => module.ContactsList)
+            }
+        />)
     }
 }
 
